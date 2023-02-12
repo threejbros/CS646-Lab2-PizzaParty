@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.ceil
 
+// Fixed constant value of slices per pizza.
 const val SLICES_PER_PIZZA = 8
 
 /**
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Assign the correct XML attribute with the current property.
         numAttendEditText = findViewById(R.id.num_attend_edit_text)
         numPizzasTextView = findViewById(R.id.num_pizzas_text_view)
         howHungryRadioGroup = findViewById(R.id.hungry_radio_group)
@@ -59,9 +62,9 @@ class MainActivity : AppCompatActivity() {
 
         // Determine how many slices on average each person will eat
         val slicesPerPerson = when (howHungryRadioGroup.checkedRadioButtonId) {
-            R.id.light_radio_button -> 2
-            R.id.medium_radio_button -> 3
-            else -> 4
+            R.id.light_radio_button -> 2    // 2 slices if hungry option is light
+            R.id.medium_radio_button -> 3   // 3 slices if hungry option is medium
+            else -> 4                       // 4 slices if hungry option is ravenous
         }
 
         // Calculate and show the number of pizzas needed
