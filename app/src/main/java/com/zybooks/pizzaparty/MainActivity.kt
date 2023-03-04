@@ -18,7 +18,7 @@ const val SLICES_PER_PIZZA = 8
  *
  * @author Jonathan Lee using code provided and instructed by ZyBooks.
  *
- * @since version 1.0.0
+ * @since version 2.0.0
  *
  * @property [numAttendEditText] to handle the user's input of number of people
  * @property [numPizzasTextView] to display the number of suggested pizzas
