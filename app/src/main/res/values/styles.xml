@@ -3,6 +3,6 @@
     <style name="CalcButton">
         <item name="android:textSize">26sp</item>
         <item name="android:textColor">@color/orange</item>
-<!--        <item name="android:backgroundTint">@color/tan</item>-->
+        <item name="android:backgroundTint">@color/light_gray</item>
     </style>
 </resources>
