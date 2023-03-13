@@ -8,9 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.ceil
 
-// Fixed constant value of slices per pizza.
-const val SLICES_PER_PIZZA = 8
-
 /**
  * This is the class for the activity that starts when PizzaParty runs. This app will
  * ask the user's input for number of people and how hungry those people are and will output
@@ -24,11 +21,15 @@ const val SLICES_PER_PIZZA = 8
  * @property [numPizzasTextView] to display the number of suggested pizzas
  * @property [howHungryRadioGroup] to obtain the user's input on how hungry the people are.
  */
+
+const val PIZZA_TOTAL_STATE = "pizzaTotalState"
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var numAttendEditText: EditText
     private lateinit var numPizzasTextView: TextView
     private lateinit var howHungryRadioGroup: RadioGroup
+    private var totalPizzas = 0
 
     /**
      * Overrides the onCreate function from AppCompatActivity to load the layout and initialize
@@ -44,6 +45,17 @@ class MainActivity : AppCompatActivity() {
         numAttendEditText = findViewById(R.id.num_attend_edit_text)
         numPizzasTextView = findViewById(R.id.num_pizzas_text_view)
         howHungryRadioGroup = findViewById(R.id.hungry_radio_group)
+
+        if (savedInstanceState != null) {
+            totalPizzas = savedInstanceState.getInt(PIZZA_TOTAL_STATE)
+            displayTotalPizzas()
+        }
+    }
+
+    private fun displayTotalPizzas() {
+        // Place totalPizzas into the string resource and display
+        val totalText = getString(R.string.total_pizzas_num, totalPizzas)
+        numPizzasTextView.setText(totalText)
     }
 
     /**
@@ -58,17 +70,25 @@ class MainActivity : AppCompatActivity() {
         val numAttendStr = numAttendEditText.text.toString()
 
         // Convert the text into an integer
-        val numAttend = numAttendStr.toInt()
+        val numAttend = numAttendStr.toIntOrNull() ?: 0
 
-        // Determine how many slices on average each person will eat
-        val slicesPerPerson = when (howHungryRadioGroup.checkedRadioButtonId) {
-            R.id.light_radio_button -> 2    // 2 slices if hungry option is light
-            R.id.medium_radio_button -> 3   // 3 slices if hungry option is medium
-            else -> 4                       // 4 slices if hungry option is ravenous
+        // Get hunger level selection
+        val hungerLevel = when (howHungryRadioGroup.getCheckedRadioButtonId()) {
+            R.id.light_radio_button -> PizzaCalculator.HungerLevel.LIGHT
+            R.id.medium_radio_button -> PizzaCalculator.HungerLevel.MEDIUM
+            else -> PizzaCalculator.HungerLevel.RAVENOUS
         }
 
-        // Calculate and show the number of pizzas needed
-        val totalPizzas = ceil(numAttend * slicesPerPerson / SLICES_PER_PIZZA.toDouble()).toInt()
-        numPizzasTextView.text = "Total pizzas: $totalPizzas"
+        // Get the number of pizzas needed
+        val calc = PizzaCalculator(numAttend, hungerLevel)
+        totalPizzas = calc.totalPizzas
+
+        displayTotalPizzas()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(PIZZA_TOTAL_STATE, totalPizzas)
+    }
+
 }

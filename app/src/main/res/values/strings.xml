@@ -7,4 +7,5 @@
     <string name="ravenous">Ravenous</string>
     <string name="total_pizzas">Total pizzas: ?</string>
     <string name="calculate">Calculate</string>
+    <string name="total_pizzas_num">Total pizzas: %d</string>
 </resources>
